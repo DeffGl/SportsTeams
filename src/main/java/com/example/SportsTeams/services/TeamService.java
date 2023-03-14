@@ -18,4 +18,9 @@ public class TeamService {
     public List<Team> getAllTeams(){
         return teamRepository.findAll();
     }
+
+    public List<Team> getAllTeamsByType(String type){
+        return teamRepository.findAllByType(type);
+    }
+
 }
