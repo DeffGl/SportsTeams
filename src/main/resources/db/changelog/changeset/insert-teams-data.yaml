@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-teams-data
+      author: Vladislav
+      changes:
+        - insert:
+            catalogName: teams
+            columns:
+              - column:
+                  name: name
+                  value: ФК Молодежный
+              - column:
+                  name: type
+                  value: Футбол
+              - column:
+                  name: date_of_creation
+                  value: 04/05/2022
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: team
+        - insert:
+            catalogName: teams
+            columns:
+              - column:
+                  name: name
+                  value: БК Данкеры
+              - column:
+                  name: type
+                  value: Баскетбол
+              - column:
+                  name: date_of_creation
+                  value: 01/04/2022
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: team
+        - insert:
+            catalogName: teams
+            columns:
+              - column:
+                  name: name
+                  value: ФК Ласточка
+              - column:
+                  name: type
+                  value: Футбол
+              - column:
+                  name: date_of_creation
+                  value: 06/09/2022
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: team
