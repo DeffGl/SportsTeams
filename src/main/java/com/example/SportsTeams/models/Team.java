@@ -30,8 +30,7 @@ public class Team {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateOfCreation;
 
-    @OneToMany
-    @JoinColumn(name="team_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "team")
     @ToString.Exclude
     @JsonIgnore
     private List<Member> members;

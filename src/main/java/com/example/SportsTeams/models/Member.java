@@ -16,6 +16,7 @@ public class Member {
     private int id;
 
     @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
     private Team team;
 
     @Column(name="surname")

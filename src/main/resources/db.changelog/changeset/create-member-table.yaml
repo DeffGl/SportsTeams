@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+    id: create-team-table
+    author: Vladislav
+    changes:
+      - createTable:
+          tableName: team
+          columns:
+            - column:
+                name: id
+                type: int
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column:
+                name: team_id
+                type: int
+                constraints:
+                  foreignKeyName: team_fk
+                  referencedTableName: team
+                  referencedColumnNames: id
+            - column:
+                name: surname
+                type: varchar(100)
+                constraints:
+                  nullable: false
+            - column:
+                name: name
+                type: varchar(100)
+                constraints:
+                  nullable: false
+            - column:
+                name: patronymic
+                type: varchar(100)
+                constraints:
+                  nullable: false
+            - column:
+                name: date_of_birth
+                type: date
+                constraints:
+                  nullable: false
+            - column:
+                name: role
+                type: varchar(100)
+                constraints:
+                  nullable: false
