@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,6 +22,10 @@ public class TeamService {
 
     public List<Team> getAllTeamsByType(String type){
         return teamRepository.findAllByType(type);
+    }
+
+    public List<Team> getAllTeamsCreatedBetween(Date firstDate, Date secondDate){
+        return teamRepository.findByDateOfCreationBetween(firstDate, secondDate);
     }
 
 }

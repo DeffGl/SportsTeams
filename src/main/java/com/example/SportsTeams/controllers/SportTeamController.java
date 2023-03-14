@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,14 @@ public class SportTeamController {
         return teamService.getAllTeamsByType(type).stream()
                 .map(team->modelMapper.map(team, TeamDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/created")
+    public List<TeamDTO> getAllTeamsCreatedBetween(@RequestParam("d1") Date firstDate, @RequestParam("d2") Date secondDate){
+        return teamService.getAllTeamsCreatedBetween(firstDate, secondDate).stream()
+                .map(team->modelMapper.map(team, TeamDTO.class))
+                .collect(Collectors.toList());
+
     }
 
 }
