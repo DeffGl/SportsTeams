@@ -42,6 +42,12 @@ public class TeamService {
         return members.stream().filter(member -> member.getRole().equals(role)).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void createTeam(Team team){
+        team.setDateOfCreation(new Date());
+        teamRepository.save(team);
+    }
+
     private Optional<Team> getTeamById(int id){
         return teamRepository.findTeamById(id).stream().findAny();
     }

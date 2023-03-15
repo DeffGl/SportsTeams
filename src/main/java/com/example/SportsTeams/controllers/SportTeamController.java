@@ -6,10 +6,7 @@ import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -57,5 +54,10 @@ public class SportTeamController {
         return teamService.getAllMembersTeamByRole(id, role).stream()
                 .map(member -> modelMapper.map(member, MemberDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/create")
+    public void createTeam(@RequestBody TeamDTO teamDTO){
+        teamService.createTeam(modelMapper.map(teamDTO, Team.class));
     }
 }
