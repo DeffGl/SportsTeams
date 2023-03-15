@@ -1,5 +1,6 @@
 package com.example.SportsTeams.controllers;
 
+import com.example.SportsTeams.dto.MemberDTO;
 import com.example.SportsTeams.dto.TeamDTO;
 import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.services.TeamService;
@@ -42,6 +43,13 @@ public class SportTeamController {
                 .map(team->modelMapper.map(team, TeamDTO.class))
                 .collect(Collectors.toList());
 
+    }
+
+    @GetMapping("/members")
+    public List<MemberDTO> getAllTeamMember(@RequestParam("id") int id){
+        return teamService.getAllTeamMember(id).stream()
+                .map(member -> modelMapper.map(member, MemberDTO.class))
+                .collect(Collectors.toList());
     }
 
 }
