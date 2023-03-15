@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -18,5 +20,17 @@ public class MemberService {
         memberRepository.save(member.setTeam(new Team().setId(id)));
     }
 
+    @Transactional
+    public void transferMember(int memberId, int newTeamId){
+        Optional<Member> member = getMemberById(memberId);
+        if (member.isPresent()){
+            Member updatedMember = member.get();
+            updatedMember.setTeam(new Team().setId(newTeamId));
+            memberRepository.save(updatedMember);
+        }
+    }
 
+    private Optional<Member> getMemberById(int id){
+        return Optional.ofNullable(memberRepository.findMemberById(id));
+    }
 }

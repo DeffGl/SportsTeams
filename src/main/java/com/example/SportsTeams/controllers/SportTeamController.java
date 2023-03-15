@@ -68,4 +68,10 @@ public class SportTeamController {
     public void addMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int id){
         memberService.addMember(modelMapper.map(memberDTO, Member.class), id);
     }
+
+    @PatchMapping("/member/transfer")
+    public void transferMember(@RequestParam("id1") int memberId, @RequestParam("id2") int newTeamId){
+        memberService.transferMember(memberId, newTeamId);
+    }
+
 }

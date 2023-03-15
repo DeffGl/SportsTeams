@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
+    Member findMemberById(int id);
 }

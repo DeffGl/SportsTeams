@@ -48,6 +48,6 @@ public class TeamService {
     }
 
     private Optional<Team> getTeamById(int id){
-        return teamRepository.findTeamById(id).stream().findAny();
+        return Optional.ofNullable(teamRepository.findTeamById(id));
     }
 }
