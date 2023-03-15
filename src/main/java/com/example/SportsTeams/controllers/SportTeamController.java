@@ -2,7 +2,9 @@ package com.example.SportsTeams.controllers;
 
 import com.example.SportsTeams.dto.MemberDTO;
 import com.example.SportsTeams.dto.TeamDTO;
+import com.example.SportsTeams.models.Member;
 import com.example.SportsTeams.models.Team;
+import com.example.SportsTeams.services.MemberService;
 import com.example.SportsTeams.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,6 +21,7 @@ public class SportTeamController {
 
     private final TeamService teamService;
     private final ModelMapper modelMapper;
+    private final MemberService memberService;
 
     @GetMapping()
     public List<TeamDTO> getAllTeams(){
@@ -56,8 +59,13 @@ public class SportTeamController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/create")
-    public void createTeam(@RequestBody TeamDTO teamDTO){
-        teamService.createTeam(modelMapper.map(teamDTO, Team.class));
+    @PostMapping("/add")
+    public void addTeam(@RequestBody TeamDTO teamDTO){
+        teamService.addTeam(modelMapper.map(teamDTO, Team.class));
+    }
+
+    @PostMapping("/member/add")
+    public void addMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int id){
+        memberService.addMember(modelMapper.map(memberDTO, Member.class), id);
     }
 }

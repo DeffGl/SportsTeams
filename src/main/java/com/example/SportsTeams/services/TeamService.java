@@ -43,9 +43,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void createTeam(Team team){
-        team.setDateOfCreation(new Date());
-        teamRepository.save(team);
+    public void addTeam(Team team){
+        teamRepository.save(team.setDateOfCreation(new Date()));
     }
 
     private Optional<Team> getTeamById(int id){
