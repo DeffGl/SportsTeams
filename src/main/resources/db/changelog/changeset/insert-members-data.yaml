@@ -99,3 +99,27 @@ databaseChangeLog:
             dbms: 'postgresql'
             schemaName: public
             tableName: member
+        - insert:
+            catalogName: members
+            columns:
+              - column:
+                  name: team_id
+                  value: "1"
+              - column:
+                  name: surname
+                  value: Рисов
+              - column:
+                  name: name
+                  value: Анатолий
+              - column:
+                  name: patronymic
+                  value: Васильевич
+              - column:
+                  name: date_of_birth
+                  value: 29/01/2001
+              - column:
+                  name: role
+                  value: Центровой
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: member

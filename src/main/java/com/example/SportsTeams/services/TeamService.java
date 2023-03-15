@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +33,16 @@ public class TeamService {
     }
 
     public List<Member> getAllTeamMember(int id){
-        Optional<Team> team = teamRepository.findTeamById(id).stream().findAny();
+        Optional<Team> team = getTeamById(id);
         return team.map(Team::getMembers).orElse(new ArrayList<>());
     }
 
+    public List<Member> getAllMembersTeamByRole (int id, String role){
+        List<Member> members = getAllTeamMember(id);
+        return members.stream().filter(member -> member.getRole().equals(role)).collect(Collectors.toList());
+    }
+
+    private Optional<Team> getTeamById(int id){
+        return teamRepository.findTeamById(id).stream().findAny();
+    }
 }

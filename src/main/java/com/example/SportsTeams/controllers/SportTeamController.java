@@ -52,4 +52,10 @@ public class SportTeamController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/members/role")
+    public List<MemberDTO> getAllMembersTeamByRole(@RequestParam("id") int id, @RequestParam("role") String role){
+        return teamService.getAllMembersTeamByRole(id, role).stream()
+                .map(member -> modelMapper.map(member, MemberDTO.class))
+                .collect(Collectors.toList());
+    }
 }
