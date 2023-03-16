@@ -74,4 +74,9 @@ public class SportTeamController {
         memberService.transferMember(memberId, newTeamId);
     }
 
+    @PatchMapping("/edit")
+    public void editTeam(@RequestBody TeamDTO teamDTO, @RequestParam("id") int teamId){
+        teamService.editTeam(modelMapper.map(teamDTO, Team.class), teamId);
+    }
+
 }
