@@ -89,4 +89,8 @@ public class SportTeamController {
         teamService.deleteTeam(teamId);
     }
 
+    @DeleteMapping("/member/delete")
+    public void deleteMember(@RequestParam("id") int memberId){
+        memberService.deleteMember(memberId);
+    }
 }

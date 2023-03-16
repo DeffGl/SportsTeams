@@ -35,6 +35,11 @@ public class MemberService {
         memberRepository.save(updatedMember.setId(memberId).setTeam(new Team().setId(teamId)));
     }
 
+    @Transactional
+    public void deleteMember(int memberId){
+        memberRepository.deleteById(memberId);
+    }
+
     private Optional<Member> getMemberById(int id){
         return Optional.ofNullable(memberRepository.findMemberById(id));
     }
