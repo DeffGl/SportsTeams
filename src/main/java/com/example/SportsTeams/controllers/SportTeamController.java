@@ -84,4 +84,9 @@ public class SportTeamController {
         memberService.editMember(modelMapper.map(memberDTO, Member.class), memberId, teamId);
     }
 
+    @DeleteMapping("/delete")
+    public void deleteTeam(@RequestParam("id") int teamId){
+        teamService.deleteTeam(teamId);
+    }
+
 }

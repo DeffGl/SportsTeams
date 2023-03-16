@@ -52,6 +52,11 @@ public class TeamService {
         teamRepository.save(updatedTeam.setId(teamId).setDateOfCreation(new Date()));
     }
 
+    @Transactional
+    public void deleteTeam(int teamId){
+        teamRepository.deleteById(teamId);
+    }
+
     private Optional<Team> getTeamById(int id){
         return Optional.ofNullable(teamRepository.findTeamById(id));
     }
