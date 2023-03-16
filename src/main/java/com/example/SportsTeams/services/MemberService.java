@@ -3,6 +3,7 @@ package com.example.SportsTeams.services;
 import com.example.SportsTeams.models.Member;
 import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.repositories.MemberRepository;
+import com.example.SportsTeams.util.MemberNotCreatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,11 @@ public class MemberService {
 
     @Transactional
     public void addMember(Member member, int teamId) {
-        memberRepository.save(member.setTeam(new Team().setId(teamId)));
+        try {
+            memberRepository.save(member.setTeam(new Team().setId(teamId)));
+        }catch (Exception e){
+            throw new MemberNotCreatedException();
+        }
     }
 
     @Transactional

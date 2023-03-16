@@ -6,6 +6,7 @@ import com.example.SportsTeams.models.enums.Role;
 import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.repositories.TeamRepository;
 import com.example.SportsTeams.util.MembersNotFoundException;
+import com.example.SportsTeams.util.TeamNotCreatedException;
 import com.example.SportsTeams.util.TeamsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,11 @@ public class TeamService {
 
     @Transactional
     public void addTeam(Team team){
-        teamRepository.save(team.setDateOfCreation(new Date()));
+        try {
+            teamRepository.save(team.setDateOfCreation(new Date()));
+        }catch (Exception e){
+            throw new TeamNotCreatedException();
+        }
     }
 
     @Transactional

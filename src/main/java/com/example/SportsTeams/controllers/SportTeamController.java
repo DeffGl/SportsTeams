@@ -8,10 +8,7 @@ import com.example.SportsTeams.models.enums.Role;
 import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.services.MemberService;
 import com.example.SportsTeams.services.TeamService;
-import com.example.SportsTeams.util.MembersErrorResponse;
-import com.example.SportsTeams.util.MembersNotFoundException;
-import com.example.SportsTeams.util.TeamsErrorResponse;
-import com.example.SportsTeams.util.TeamsNotFoundException;
+import com.example.SportsTeams.util.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -68,13 +65,15 @@ public class SportTeamController {
     }
 
     @PostMapping("/add")
-    public void addTeam(@RequestBody TeamDTO teamDTO){
+    public ResponseEntity<HttpStatus> addTeam(@RequestBody TeamDTO teamDTO){
         teamService.addTeam(modelMapper.map(teamDTO, Team.class));
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/member/add")
-    public void addMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int teamId){
+    public ResponseEntity<HttpStatus> addMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int teamId){
         memberService.addMember(modelMapper.map(memberDTO, Member.class), teamId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PatchMapping("/member/transfer")
@@ -112,5 +111,17 @@ public class SportTeamController {
     private ResponseEntity<MembersErrorResponse> handleException(MembersNotFoundException e){
         MembersErrorResponse response = new MembersErrorResponse("Members is not found", new Date());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<TeamsErrorResponse> handleException(TeamNotCreatedException e){
+        TeamsErrorResponse response = new TeamsErrorResponse("Create team is failed", new Date());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<MembersErrorResponse> handleException(MemberNotCreatedException e){
+        MembersErrorResponse response = new MembersErrorResponse("Create member is failed", new Date());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
