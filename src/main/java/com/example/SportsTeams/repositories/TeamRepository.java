@@ -13,5 +13,4 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<Team, Integer> {
     List<Team> findAllByType(Type type);
     List<Team> findByDateOfCreationBetween(Date firstDate, Date secondDate);
-    Team findTeamById(int id);
 }

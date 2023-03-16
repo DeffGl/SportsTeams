@@ -7,6 +7,7 @@ import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.repositories.TeamRepository;
 import com.example.SportsTeams.util.MembersNotFoundException;
 import com.example.SportsTeams.util.TeamNotCreatedException;
+import com.example.SportsTeams.util.TeamNotEditedException;
 import com.example.SportsTeams.util.TeamsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,24 +26,24 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
 
-    public List<Team> getAllTeams(){
+    public List<Team> getAllTeams() {
         return checkTeams(teamRepository.findAll());
     }
 
-    public List<Team> getAllTeamsByType(Type type){
+    public List<Team> getAllTeamsByType(Type type) {
         return checkTeams(teamRepository.findAllByType(type));
     }
 
-    public List<Team> getAllTeamsCreatedBetween(Date firstDate, Date secondDate){
+    public List<Team> getAllTeamsCreatedBetween(Date firstDate, Date secondDate) {
         return checkTeams(teamRepository.findByDateOfCreationBetween(firstDate, secondDate));
     }
 
-    public List<Member> getAllTeamMember(int teamId){
-        Optional<Team> team = getTeamById(teamId);
+    public List<Member> getAllTeamMember(int teamId) {
+        Optional<Team> team = teamRepository.findById(teamId);
         return team.map(Team::getMembers).orElseThrow(MembersNotFoundException::new);
     }
 
-    public List<Member> getAllMembersTeamByRole (int teamId, Role role){
+    public List<Member> getAllMembersTeamByRole(int teamId, Role role) {
         List<Member> members = getAllTeamMember(teamId);
         return checkMembers(members
                 .stream()
@@ -51,39 +52,46 @@ public class TeamService {
     }
 
     @Transactional
-    public void addTeam(Team team){
+    public void addTeam(Team team) {
         try {
             teamRepository.save(team.setDateOfCreation(new Date()));
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new TeamNotCreatedException();
         }
     }
 
     @Transactional
-    public void editTeam(Team updatedTeam, int teamId){
-        teamRepository.save(updatedTeam.setId(teamId).setDateOfCreation(new Date()));
+    public void editTeam(Team updatedTeam, int teamId) {
+        checkTeamById(teamId);
+        try {
+            teamRepository.saveAndFlush(updatedTeam.setId(teamId).setDateOfCreation(new Date()));
+        }catch (Exception e){
+            throw new TeamNotEditedException();
+        }
     }
 
     @Transactional
-    public void deleteTeam(int teamId){
+    public void deleteTeam(int teamId) {
         teamRepository.deleteById(teamId);
     }
 
-    private Optional<Team> getTeamById(int id){
-        return Optional.ofNullable(teamRepository.findTeamById(id));
-    }
-
-    private List<Team> checkTeams(List<Team> teams){
-        if (teams.isEmpty()){
+    private List<Team> checkTeams(List<Team> teams) {
+        if (teams.isEmpty()) {
             throw new TeamsNotFoundException();
         }
         return teams;
     }
 
-    private List<Member> checkMembers(List<Member> members){
-        if (members.isEmpty()){
+    private List<Member> checkMembers(List<Member> members) {
+        if (members.isEmpty()) {
             throw new MembersNotFoundException();
         }
         return members;
+    }
+
+    private void checkTeamById(int teamId) {
+        if (!teamRepository.findById(teamId).isPresent()){
+            throw new TeamsNotFoundException();
+        }
     }
 }

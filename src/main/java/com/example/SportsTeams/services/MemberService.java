@@ -4,6 +4,9 @@ import com.example.SportsTeams.models.Member;
 import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.repositories.MemberRepository;
 import com.example.SportsTeams.util.MemberNotCreatedException;
+import com.example.SportsTeams.util.MemberNotEditedException;
+import com.example.SportsTeams.util.MemberNotTransferredException;
+import com.example.SportsTeams.util.MembersNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,17 +30,22 @@ public class MemberService {
 
     @Transactional
     public void transferMember(int memberId, int newTeamId){
-        Optional<Member> member = getMemberById(memberId);
-        if (member.isPresent()){
-            Member updatedMember = member.get();
-            updatedMember.setTeam(new Team().setId(newTeamId));
-            memberRepository.save(updatedMember);
+        Member member = getMember(memberId);
+        try {
+            memberRepository.save(member.setTeam(new Team().setId(newTeamId)));
+        }catch (Exception e) {
+            throw new MemberNotTransferredException();
         }
     }
 
     @Transactional
     public void editMember(Member updatedMember, int memberId, int teamId){
-        memberRepository.save(updatedMember.setId(memberId).setTeam(new Team().setId(teamId)));
+
+        try {
+            memberRepository.save(updatedMember.setId(memberId).setTeam(new Team().setId(teamId)));
+        }catch (Exception e){
+            throw new MemberNotEditedException();
+        }
     }
 
     @Transactional
@@ -45,7 +53,12 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    private Optional<Member> getMemberById(int id){
-        return Optional.ofNullable(memberRepository.findMemberById(id));
+    private Member getMember(int memberId){
+        Optional<Member> member = memberRepository.findById(memberId);
+        if (member.isPresent()){
+            return member.get();
+        }
+        throw new MembersNotFoundException();
     }
+    private void checkMember
 }

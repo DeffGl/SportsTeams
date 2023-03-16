@@ -20,7 +20,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     @ToString.Exclude
     @JsonIgnore
