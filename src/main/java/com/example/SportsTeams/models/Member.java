@@ -1,5 +1,6 @@
 package com.example.SportsTeams.models;
 
+import com.example.SportsTeams.models.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class Member {
     private Date dateOfBirth;
 
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }

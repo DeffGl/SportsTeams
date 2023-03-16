@@ -2,6 +2,8 @@ package com.example.SportsTeams.services;
 
 import com.example.SportsTeams.models.Member;
 import com.example.SportsTeams.models.Team;
+import com.example.SportsTeams.models.enums.Role;
+import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public List<Team> getAllTeamsByType(String type){
+    public List<Team> getAllTeamsByType(Type type){
         return teamRepository.findAllByType(type);
     }
 
@@ -32,13 +34,13 @@ public class TeamService {
         return teamRepository.findByDateOfCreationBetween(firstDate, secondDate);
     }
 
-    public List<Member> getAllTeamMember(int id){
-        Optional<Team> team = getTeamById(id);
+    public List<Member> getAllTeamMember(int teamId){
+        Optional<Team> team = getTeamById(teamId);
         return team.map(Team::getMembers).orElse(new ArrayList<>());
     }
 
-    public List<Member> getAllMembersTeamByRole (int id, String role){
-        List<Member> members = getAllTeamMember(id);
+    public List<Member> getAllMembersTeamByRole (int teamId, Role role){
+        List<Member> members = getAllTeamMember(teamId);
         return members.stream().filter(member -> member.getRole().equals(role)).collect(Collectors.toList());
     }
 

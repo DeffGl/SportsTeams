@@ -4,6 +4,8 @@ import com.example.SportsTeams.dto.MemberDTO;
 import com.example.SportsTeams.dto.TeamDTO;
 import com.example.SportsTeams.models.Member;
 import com.example.SportsTeams.models.Team;
+import com.example.SportsTeams.models.enums.Role;
+import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.services.MemberService;
 import com.example.SportsTeams.services.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class SportTeamController {
     }
 
     @GetMapping("/type")
-    public List<TeamDTO> getAllTeamsByType(@RequestParam("type") String type){
+    public List<TeamDTO> getAllTeamsByType(@RequestParam("type") Type type){
         return teamService.getAllTeamsByType(type).stream()
                 .map(team->modelMapper.map(team, TeamDTO.class))
                 .collect(Collectors.toList());
@@ -46,15 +48,15 @@ public class SportTeamController {
     }
 
     @GetMapping("/members")
-    public List<MemberDTO> getAllTeamMember(@RequestParam("id") int id){
-        return teamService.getAllTeamMember(id).stream()
+    public List<MemberDTO> getAllTeamMember(@RequestParam("id") int teamId){
+        return teamService.getAllTeamMember(teamId).stream()
                 .map(member -> modelMapper.map(member, MemberDTO.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/members/role")
-    public List<MemberDTO> getAllMembersTeamByRole(@RequestParam("id") int id, @RequestParam("role") String role){
-        return teamService.getAllMembersTeamByRole(id, role).stream()
+    public List<MemberDTO> getAllMembersTeamByRole(@RequestParam("id") int teamId, @RequestParam("role") Role role){
+        return teamService.getAllMembersTeamByRole(teamId, role).stream()
                 .map(member -> modelMapper.map(member, MemberDTO.class))
                 .collect(Collectors.toList());
     }
@@ -65,8 +67,8 @@ public class SportTeamController {
     }
 
     @PostMapping("/member/add")
-    public void addMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int id){
-        memberService.addMember(modelMapper.map(memberDTO, Member.class), id);
+    public void addMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int teamId){
+        memberService.addMember(modelMapper.map(memberDTO, Member.class), teamId);
     }
 
     @PatchMapping("/member/transfer")

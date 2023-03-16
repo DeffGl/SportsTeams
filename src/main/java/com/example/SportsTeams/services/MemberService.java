@@ -16,8 +16,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void addMember(Member member, int id) {
-        memberRepository.save(member.setTeam(new Team().setId(id)));
+    public void addMember(Member member, int teamId) {
+        memberRepository.save(member.setTeam(new Team().setId(teamId)));
     }
 
     @Transactional

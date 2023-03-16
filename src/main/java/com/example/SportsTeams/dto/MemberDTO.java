@@ -1,6 +1,7 @@
 package com.example.SportsTeams.dto;
 
 import com.example.SportsTeams.models.Team;
+import com.example.SportsTeams.models.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
@@ -22,5 +23,5 @@ public class MemberDTO {
 
     private Date dateOfBirth;
 
-    private String role;
+    private Role role;
 }

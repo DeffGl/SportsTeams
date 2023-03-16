@@ -23,7 +23,7 @@ databaseChangeLog:
                   value: 11/05/2000
               - column:
                   name: role
-                  value: Центровой
+                  value: Защитник
             dbms: 'postgresql'
             schemaName: public
             tableName: member
@@ -47,7 +47,7 @@ databaseChangeLog:
                   value: 04/01/2000
               - column:
                   name: role
-                  value: Разыгрывающий защитник
+                  value: Разыгрывающий
             dbms: 'postgresql'
             schemaName: public
             tableName: member
@@ -71,7 +71,7 @@ databaseChangeLog:
                   value: 15/12/2000
               - column:
                   name: role
-                  value: Нападающий
+                  value: Разыгрывающий
             dbms: 'postgresql'
             schemaName: public
             tableName: member
@@ -95,7 +95,7 @@ databaseChangeLog:
                   value: 29/10/2000
               - column:
                   name: role
-                  value: Атакующий защитник
+                  value: Нападающий
             dbms: 'postgresql'
             schemaName: public
             tableName: member
@@ -119,7 +119,7 @@ databaseChangeLog:
                   value: 29/01/2001
               - column:
                   name: role
-                  value: Центровой
+                  value: Защитник
             dbms: 'postgresql'
             schemaName: public
             tableName: member

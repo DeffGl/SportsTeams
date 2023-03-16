@@ -1,5 +1,6 @@
 package com.example.SportsTeams.models;
 
+import com.example.SportsTeams.models.enums.Type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,7 +26,8 @@ public class Team {
     private String name;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @Column(name = "date_of_creation")
     @Temporal(TemporalType.DATE)
