@@ -5,6 +5,8 @@ import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.models.enums.Role;
 import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.repositories.TeamRepository;
+import com.example.SportsTeams.util.MembersNotFoundException;
+import com.example.SportsTeams.util.TeamsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,25 +25,28 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     public List<Team> getAllTeams(){
-        return teamRepository.findAll();
+        return checkTeams(teamRepository.findAll());
     }
 
     public List<Team> getAllTeamsByType(Type type){
-        return teamRepository.findAllByType(type);
+        return checkTeams(teamRepository.findAllByType(type));
     }
 
     public List<Team> getAllTeamsCreatedBetween(Date firstDate, Date secondDate){
-        return teamRepository.findByDateOfCreationBetween(firstDate, secondDate);
+        return checkTeams(teamRepository.findByDateOfCreationBetween(firstDate, secondDate));
     }
 
     public List<Member> getAllTeamMember(int teamId){
         Optional<Team> team = getTeamById(teamId);
-        return team.map(Team::getMembers).orElse(new ArrayList<>());
+        return team.map(Team::getMembers).orElseThrow(MembersNotFoundException::new);
     }
 
     public List<Member> getAllMembersTeamByRole (int teamId, Role role){
         List<Member> members = getAllTeamMember(teamId);
-        return members.stream().filter(member -> member.getRole().equals(role)).collect(Collectors.toList());
+        return checkMembers(members
+                .stream()
+                .filter(member -> member.getRole().equals(role))
+                .collect(Collectors.toList()));
     }
 
     @Transactional
@@ -61,5 +66,19 @@ public class TeamService {
 
     private Optional<Team> getTeamById(int id){
         return Optional.ofNullable(teamRepository.findTeamById(id));
+    }
+
+    private List<Team> checkTeams(List<Team> teams){
+        if (teams.isEmpty()){
+            throw new TeamsNotFoundException();
+        }
+        return teams;
+    }
+
+    private List<Member> checkMembers(List<Member> members){
+        if (members.isEmpty()){
+            throw new MembersNotFoundException();
+        }
+        return members;
     }
 }

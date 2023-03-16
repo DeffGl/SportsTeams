@@ -8,8 +8,14 @@ import com.example.SportsTeams.models.enums.Role;
 import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.services.MemberService;
 import com.example.SportsTeams.services.TeamService;
+import com.example.SportsTeams.util.MembersErrorResponse;
+import com.example.SportsTeams.util.MembersNotFoundException;
+import com.example.SportsTeams.util.TeamsErrorResponse;
+import com.example.SportsTeams.util.TeamsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -94,5 +100,17 @@ public class SportTeamController {
     @DeleteMapping("/member/delete")
     public void deleteMember(@RequestParam("id") int memberId){
         memberService.deleteMember(memberId);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<TeamsErrorResponse> handleException (TeamsNotFoundException e){
+        TeamsErrorResponse response = new TeamsErrorResponse("Teams is not found", new Date());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<MembersErrorResponse> handleException(MembersNotFoundException e){
+        MembersErrorResponse response = new MembersErrorResponse("Members is not found", new Date());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
