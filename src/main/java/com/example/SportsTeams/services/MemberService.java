@@ -30,6 +30,11 @@ public class MemberService {
         }
     }
 
+    @Transactional
+    public void editMember(Member updatedMember, int memberId, int teamId){
+        memberRepository.save(updatedMember.setId(memberId).setTeam(new Team().setId(teamId)));
+    }
+
     private Optional<Member> getMemberById(int id){
         return Optional.ofNullable(memberRepository.findMemberById(id));
     }
