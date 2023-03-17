@@ -20,6 +20,7 @@ public class MemberService {
 
     @Transactional
     public void addMember(Member member, int teamId) {
+        teamService.checkTeamById(teamId);
         try {
             memberRepository.save(member.setTeam(new Team().setId(teamId)));
         }catch (Exception e){

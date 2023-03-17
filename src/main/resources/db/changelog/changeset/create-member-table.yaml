@@ -18,8 +18,8 @@ databaseChangeLog:
                   type: int
                   constraints:
                     foreignKeyName: team_fk
-                    referencedTableName: team
-                    referencedColumnNames: id
+                    references: team(id) on delete set null
+                    nullable: true
               - column:
                   name: surname
                   type: varchar(100)
