@@ -28,6 +28,8 @@ public class SportTeamController {
     private final ModelMapper modelMapper;
     private final MemberService memberService;
 
+    private final Response response;
+
     @GetMapping()
     public List<TeamDTO> getAllTeams(){
         return teamService.getAllTeams().stream()
@@ -108,58 +110,47 @@ public class SportTeamController {
 
     @ExceptionHandler
     private ResponseEntity<TeamsErrorResponse> handleException (TeamsNotFoundException e){
-        TeamsErrorResponse response = new TeamsErrorResponse("Teams is not found", new Date());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return response.createTeamResponseByNotFound("Teams is not found");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException(MembersNotFoundException e){
-        MembersErrorResponse response = new MembersErrorResponse("Members is not found", new Date());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return response.createMemberResponseByNotFound("Members is not found");
     }
 
     @ExceptionHandler
     private ResponseEntity<TeamsErrorResponse> handleException(TeamNotCreatedException e){
-        return createTeamResponse("Create team is failed");
+        return response.createTeamResponseByBadRequest("Create team is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException(MemberNotCreatedException e){
-        return createMemberResponse("Create member is failed");
+        return response.createMemberResponseByBadRequest("Create member is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException (MemberNotTransferredException e){
-        return createMemberResponse("Transfer member is failed");
+        return response.createMemberResponseByBadRequest("Transfer member is failed");
     }
 
     @ExceptionHandler ResponseEntity<TeamsErrorResponse> handleException (TeamNotEditedException e){
-        return createTeamResponse("Edit team is failed");
+        return response.createTeamResponseByBadRequest("Edit team is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException(MemberNotEditedException e){
-        return createMemberResponse("Edit member is failed");
+        return response.createMemberResponseByBadRequest("Edit member is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<TeamsErrorResponse> handleException(TeamNotDeleteException e){
-        return createTeamResponse("Delete team is failed");
+        return response.createTeamResponseByBadRequest("Delete team is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException(MemberNotDeleteException e){
-        return createMemberResponse("Delete member is failed");
+        return response.createMemberResponseByBadRequest("Delete member is failed");
     }
 
-    private ResponseEntity<TeamsErrorResponse> createTeamResponse(String message){
-        TeamsErrorResponse response = new TeamsErrorResponse(message, new Date());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    private ResponseEntity<MembersErrorResponse> createMemberResponse(String message){
-        MembersErrorResponse response = new MembersErrorResponse(message, new Date());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
 }

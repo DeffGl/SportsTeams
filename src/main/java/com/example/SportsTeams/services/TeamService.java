@@ -5,10 +5,7 @@ import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.models.enums.Role;
 import com.example.SportsTeams.models.enums.Type;
 import com.example.SportsTeams.repositories.TeamRepository;
-import com.example.SportsTeams.util.MembersNotFoundException;
-import com.example.SportsTeams.util.TeamNotCreatedException;
-import com.example.SportsTeams.util.TeamNotEditedException;
-import com.example.SportsTeams.util.TeamsNotFoundException;
+import com.example.SportsTeams.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +68,12 @@ public class TeamService {
 
     @Transactional
     public void deleteTeam(int teamId) {
-        teamRepository.deleteById(teamId);
+        checkTeamById(teamId);
+        try {
+            teamRepository.deleteById(teamId);
+        }catch (Exception e){
+            throw new TeamNotDeleteException();
+        }
     }
 
     private List<Team> getTeams(List<Team> teams) {

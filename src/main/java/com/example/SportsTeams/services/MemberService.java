@@ -4,10 +4,7 @@ import com.example.SportsTeams.models.Member;
 import com.example.SportsTeams.models.Team;
 import com.example.SportsTeams.repositories.MemberRepository;
 import com.example.SportsTeams.repositories.TeamRepository;
-import com.example.SportsTeams.util.MemberNotCreatedException;
-import com.example.SportsTeams.util.MemberNotEditedException;
-import com.example.SportsTeams.util.MemberNotTransferredException;
-import com.example.SportsTeams.util.MembersNotFoundException;
+import com.example.SportsTeams.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,12 +50,26 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(int memberId){
-        memberRepository.deleteById(memberId);
+        checkMemberById(memberId);
+        try {
+            memberRepository.deleteById(memberId);
+        }catch (Exception e){
+            throw new MemberNotDeleteException();
+        }
     }
 
     private Member getMember(int memberId){
-        Optional<Member> member = memberRepository.findById(memberId);
+        Optional<Member> member = findMember(memberId);
         return member.orElseThrow(MembersNotFoundException::new);
+    }
+
+    private void checkMemberById(int memberId){
+        if (!findMember(memberId).isPresent()) {
+            throw new MembersNotFoundException();
+        }
+    }
+    private Optional<Member> findMember(int memberId){
+        return memberRepository.findById(memberId);
     }
 
 }
