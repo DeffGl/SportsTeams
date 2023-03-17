@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,25 +26,25 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     public List<Team> getAllTeams() {
-        return checkTeams(teamRepository.findAll());
+        return getTeams(teamRepository.findAll());
     }
 
     public List<Team> getAllTeamsByType(Type type) {
-        return checkTeams(teamRepository.findAllByType(type));
+        return getTeams(teamRepository.findAllByType(type));
     }
 
     public List<Team> getAllTeamsCreatedBetween(Date firstDate, Date secondDate) {
-        return checkTeams(teamRepository.findByDateOfCreationBetween(firstDate, secondDate));
+        return getTeams(teamRepository.findByDateOfCreationBetween(firstDate, secondDate));
     }
 
     public List<Member> getAllTeamMember(int teamId) {
-        Optional<Team> team = teamRepository.findById(teamId);
-        return team.map(Team::getMembers).orElseThrow(MembersNotFoundException::new);
+        Team team = getTeamById(teamId);
+        return getMembers(team.getMembers());
     }
 
     public List<Member> getAllMembersTeamByRole(int teamId, Role role) {
         List<Member> members = getAllTeamMember(teamId);
-        return checkMembers(members
+        return getMembers(members
                 .stream()
                 .filter(member -> member.getRole().equals(role))
                 .collect(Collectors.toList()));
@@ -65,7 +64,7 @@ public class TeamService {
         checkTeamById(teamId);
         try {
             teamRepository.saveAndFlush(updatedTeam.setId(teamId).setDateOfCreation(new Date()));
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new TeamNotEditedException();
         }
     }
@@ -75,23 +74,33 @@ public class TeamService {
         teamRepository.deleteById(teamId);
     }
 
-    private List<Team> checkTeams(List<Team> teams) {
+    private List<Team> getTeams(List<Team> teams) {
         if (teams.isEmpty()) {
             throw new TeamsNotFoundException();
+
         }
         return teams;
     }
 
-    private List<Member> checkMembers(List<Member> members) {
+    private List<Member> getMembers(List<Member> members) {
         if (members.isEmpty()) {
             throw new MembersNotFoundException();
         }
         return members;
     }
 
-    private void checkTeamById(int teamId) {
-        if (!teamRepository.findById(teamId).isPresent()){
+    private Optional<Team> findTeam(int teamId) {
+        return teamRepository.findById(teamId);
+    }
+
+    public void checkTeamById(int teamId) {
+        if (!findTeam(teamId).isPresent()) {
             throw new TeamsNotFoundException();
         }
+    }
+
+    private Team getTeamById (int teamId){
+        Optional<Team> team = findTeam(teamId);
+        return team.orElseThrow(TeamsNotFoundException::new);
     }
 }

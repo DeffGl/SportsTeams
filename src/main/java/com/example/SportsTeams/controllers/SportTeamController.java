@@ -89,19 +89,21 @@ public class SportTeamController {
     }
 
     @PatchMapping("/member/edit")
-    public ResponseEntity<HttpStatus> editMember(@RequestBody MemberDTO memberDTO, @RequestParam("id1") int memberId, @RequestParam("id2") int teamId){
-        memberService.editMember(modelMapper.map(memberDTO, Member.class), memberId, teamId);
+    public ResponseEntity<HttpStatus> editMember(@RequestBody MemberDTO memberDTO, @RequestParam("id") int memberId){
+        memberService.editMember(modelMapper.map(memberDTO, Member.class), memberId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
-    public void deleteTeam(@RequestParam("id") int teamId){
+    public ResponseEntity<HttpStatus> deleteTeam(@RequestParam("id") int teamId){
         teamService.deleteTeam(teamId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/member/delete")
-    public void deleteMember(@RequestParam("id") int memberId){
+    public ResponseEntity<HttpStatus> deleteMember(@RequestParam("id") int memberId){
         memberService.deleteMember(memberId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
@@ -118,30 +120,46 @@ public class SportTeamController {
 
     @ExceptionHandler
     private ResponseEntity<TeamsErrorResponse> handleException(TeamNotCreatedException e){
-        TeamsErrorResponse response = new TeamsErrorResponse("Create team is failed", new Date());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return createTeamResponse("Create team is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException(MemberNotCreatedException e){
-        MembersErrorResponse response = new MembersErrorResponse("Create member is failed", new Date());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return createMemberResponse("Create member is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException (MemberNotTransferredException e){
-        MembersErrorResponse response = new MembersErrorResponse("Transfer member is failed ", new Date());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return createMemberResponse("Transfer member is failed");
     }
 
     @ExceptionHandler ResponseEntity<TeamsErrorResponse> handleException (TeamNotEditedException e){
-        TeamsErrorResponse response = new TeamsErrorResponse("Edit team is failed", new Date());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return createTeamResponse("Edit team is failed");
     }
 
     @ExceptionHandler
     private ResponseEntity<MembersErrorResponse> handleException(MemberNotEditedException e){
-        MembersErrorResponse response = new MembersErrorResponse("Edit member is failed", new Date());
+        return createMemberResponse("Edit member is failed");
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<TeamsErrorResponse> handleException(TeamNotDeleteException e){
+        return createTeamResponse("Delete team is failed");
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<MembersErrorResponse> handleException(MemberNotDeleteException e){
+        return createMemberResponse("Delete member is failed");
+    }
+
+    private ResponseEntity<TeamsErrorResponse> createTeamResponse(String message){
+        TeamsErrorResponse response = new TeamsErrorResponse(message, new Date());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    private ResponseEntity<MembersErrorResponse> createMemberResponse(String message){
+        MembersErrorResponse response = new MembersErrorResponse(message, new Date());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

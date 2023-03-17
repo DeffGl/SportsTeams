@@ -3,12 +3,5 @@ databaseChangeLog:
       file: db/changelog/changeset/create-team-table.yaml
   - include:
       file: db/changelog/changeset/create-member-table.yaml
-  - include:
-      file: db/changelog/changeset/insert-teams-data.yaml
-  - include:
-      file: db/changelog/changeset/insert-members-data.yaml
 
-      asfa
-      asfas
-      fas
-      as
+
